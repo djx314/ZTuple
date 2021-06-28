@@ -1,0 +1,24 @@
+@(tupleCount: Int)
+package ztuple
+
+trait ZTuple {
+    type Next[T] <: ZTuple
+    def next[T](t: T): Next[T]
+}
+
+case object ZTuple0 extends ZTuple {
+    override type Next[T] = ZTuple1[T]
+    override def next[T](t: T): ZTuple1[T] = ZTuple1(t)
+}
+
+@for(i <- 1 to tupleCount - 2) {
+    case class ZTuple@{i}[I1 @for(ii <- 2 to i) { , I@{ii} }](i1: I1 @for(ii <- 2 to i) { , i@{ii}: I@{ii} }) extends ZTuple {
+        override type Next[T] = ZTuple@{i + 1}[@for(ii <- 1 to i) { I@{ii}, } T]
+        override def next[T](t: T): ZTuple@{i + 1}[@for(ii <- 1 to i) { I@{ii}, } T] = ZTuple@{i + 1}(@for(ii <- 1 to i) { i@{ii}, } t)
+    }
+}
+
+case class ZTuple@{tupleCount - 1}[I1 @for(ii <- 2 to tupleCount) { , I@{ii} }](@for(ii <- 1 to i) { i@{ii}: I@{ii}, } tail: ) extends ZTuple {
+    override type Next[T] = ZTuple@{tupleCount}[@for(ii <- 1 to i) { I@{ii}, } T]
+    override def next[T](t: T): ZTuple@{i + 1}[@for(ii <- 1 to i) { I@{ii}, } T] = ZTuple@{i + 1}(@for(ii <- 1 to i) { i@{ii}, } t)
+}

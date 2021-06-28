@@ -7,7 +7,8 @@ import java.nio.file.Files
 import scala.util.Using
 
 object ZTuple3GenRunner {
-  val testDir = Paths.get(".", "modules", "ztuple3", "src", "test", "scala", "ztuple3", "codegen", "test", "codegen")
+  val testDir   = Paths.get(".", "modules", "ztuple3", "src", "test", "scala", "ztuple3", "codegen", "test", "codegen")
+  val ztupleDir = Paths.get(".", "modules", "ztuple10", "src", "main", "scala", "ztuple")
 
   def main(arr: Array[String]): Unit = {
     {
@@ -18,11 +19,21 @@ object ZTuple3GenRunner {
         writer.println(content)
       }
     }
+
     for (i <- 1 to 256) {
       val filePath = testDir.resolve(s"TestCase${i}.scala")
       Files.createDirectories(filePath.getParent)
       Using(new PrintWriter(filePath.toFile, "utf-8")) { writer =>
         val content = StringUtil.trimLines(ztuple3.codegen.txt.ZTuple3FetchTestX(current = i).body)
+        writer.println(content)
+      }
+    }
+
+    {
+      val filePath = ztupleDir.resolve("ZTuple.scala")
+      Files.createDirectories(filePath.getParent)
+      Using(new PrintWriter(filePath.toFile, "utf-8")) { writer =>
+        val content = StringUtil.trimLines(ztupleN.codegen.scala2.txt.ZTupleGen(tupleCount = 10).body)
         writer.println(content)
       }
     }
