@@ -37,5 +37,14 @@ object ZTuple3GenRunner {
         writer.println(content)
       }
     }
+
+    {
+      val filePath = ztupleDir.resolve("TopTree.scala")
+      Files.createDirectories(filePath.getParent)
+      Using(new PrintWriter(filePath.toFile, "utf-8")) { writer =>
+        val content = StringUtil.trimLines(ztupleN.codegen.scala2.txt.TreeNumberGen(tupleCount = 10).body)
+        writer.println(content)
+      }
+    }
   }
 }
