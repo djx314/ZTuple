@@ -40,6 +40,11 @@ case object ZTuple0 extends ZTuple {
         override def next[T](t: T): ZTuple9[ I1,  I2,  I3,  I4,  I5,  I6,  I7,  I8,  T] = ZTuple9( i1,  i2,  i3,  i4,  i5,  i6,  i7,  i8,  t)
     }
 case class ZTuple9[I1  , I2  , I3  , I4  , I5  , I6  , I7  , I8  , I9 ](i1: I1  , i2: I2  , i3: I3  , i4: I4  , i5: I5  , i6: I6  , i7: I7  , i8: I8  , i9: I9 ) extends ZTuple {
-    override type Next[T] = ZTuple10[I1  , I2  , I3  , I4  , I5  , I6  , I7  , I8  , I9  , I10 ]
-    override def next[T](t: T): ZTuple11[I1  , I2  , I3  , I4  , I5  , I6  , I7  , I8  , I9  , I10 ] = ZTuple11(i1  , i2  , i3  , i4  , i5  , i6  , i7  , i8  , i9  , i10 )
+    override type Next[T] = ZTuple10[ I1,  I2,  I3,  I4,  I5,  I6,  I7,  I8,  I9,  TopZero1[BottomSubTree0[T]]]
+    override def next[T](t: T): ZTuple10[ I1,  I2,  I3,  I4,  I5,  I6,  I7,  I8,  I9,  TopZero1[BottomSubTree0[T]]] =
+    ZTuple10( i1,  i2,  i3,  i4,  i5,  i6,  i7,  i8,  i9,  TopZero1(BottomSubTree0(t)))
+}
+case class ZTuple10[ I1,  I2,  I3,  I4,  I5,  I6,  I7,  I8,  I9,  Tail <: TopNumber]( i1: I1,  i2: I2,  i3: I3,  i4: I4,  i5: I5,  i6: I6,  i7: I7,  i8: I8,  i9: I9,  tail: Tail) extends ZTuple {
+    override type Next[T]
+    override def next[T](t: T): ZTuple10[ I1,  I2,  I3,  I4,  I5,  I6,  I7,  I8,  I9,  Tail]
 }

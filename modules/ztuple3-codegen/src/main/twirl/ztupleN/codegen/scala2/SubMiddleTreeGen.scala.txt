@@ -1,0 +1,25 @@
+@(tupleCount: Int)
+package ztuple
+
+trait SubTree {
+    type Add[M <: MonadTop, T] <: ZTuple
+    def add[M <: MonadTop, T](m: M, t: T): Add[M, T]
+}
+
+@for(i <- 1 to tupleCount) {
+    case class MiddleSubTree@{i - 1}[N0 <: SubTree @for(ii <- 1 to i - 1) { , N@{ii} <: SubTree }](
+        n0: N0 @for(ii <- 1 to i - 1) { , m@{ii} : N@{ii} }
+    ) extends SubTree {
+        type Add[M <: MonadTop, T] <: ZTuple
+        def add[M <: MonadTop, T](m: M, t: T): Add[M, T]
+    }
+}
+
+@for(i <- 1 to tupleCount) {
+    case class BottomSubTree@{i - 1}[T0 @for(ii <- 1 to i - 1) { , T@{ii} }](
+        t0: T0 @for(ii <- 1 to i - 1) { , t@{ii} : T@{ii} }
+    ) extends SubTree {
+        type Add[M <: MonadTop, T] <: ZTuple
+        def add[M <: MonadTop, T](m: M, t: T): Add[M, T]
+    }
+}

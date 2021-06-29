@@ -6,14 +6,14 @@ trait TopNumber {
     def next[D <: SubTree, T](d: D, t: T): Next[D, T]
 }
 
-case class TopSimple@(tupleCount)[I1 @for(i <- 2 to tupleCount - 1) { , I@{i} }](i1: I1 @for(i <- 2 to tupleCount - 1) { , i@{i}: I@{i} }) {
+/* case class TopSimple@(tupleCount)[I1 @for(i <- 2 to tupleCount - 1) { , I@{i} }](i1: I1 @for(i <- 2 to tupleCount - 1) { , i@{i}: I@{i} }) {
     type Next[D <: SubTree, T] <: ZTuple
     def next[D <: SubTree, T](d: D, t: T): Next[D, T]
-}
+} */
 
 case class TopDeep@(tupleCount - 1)[N1 <: SubTree @for(i <- 2 to tupleCount - 1) { , N@{i} <: SubTree }, Tail <: TopNumber](
     @for(i <- 1 to tupleCount - 1) { n@{i}: N@{i}, } tail: Tail
-) {
+) extends TopNumber {
     type Next[D <: SubTree, T] <: ZTuple
     def next[D <: SubTree, T](d: D, t: T): Next[D, T]
 }
@@ -21,7 +21,7 @@ case class TopDeep@(tupleCount - 1)[N1 <: SubTree @for(i <- 2 to tupleCount - 1)
 @for(i <- 1 to tupleCount - 1) {
     case class TopZero@(i)[N1 <: SubTree @for(ii <- 2 to i) { , N@{ii} <: SubTree }](
         n1: N1 @for(ii <- 2 to i) { , n@{ii}: N@{ii} }
-    ) {
+    ) extends TopNumber {
         type Next[D <: SubTree, T] <: ZTuple
         def next[D <: SubTree, T](d: D, t: T): Next[D, T]
     }

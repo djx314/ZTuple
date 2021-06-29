@@ -19,6 +19,12 @@ case object ZTuple0 extends ZTuple {
 }
 
 case class ZTuple@{tupleCount - 1}[I1 @for(ii <- 2 to tupleCount - 1) { , I@{ii} }](i1: I1 @for(ii <- 2 to tupleCount - 1) { , i@{ii}: I@{ii} }) extends ZTuple {
-    override type Next[T] = ZTuple@{tupleCount}[I1 @for(ii <- 2 to tupleCount) { , I@{ii} }]
-    override def next[T](t: T): ZTuple@{tupleCount + 1}[I1 @for(ii <- 2 to tupleCount) { , I@{ii} }] = ZTuple@{tupleCount + 1}(i1 @for(ii <- 2 to tupleCount) { , i@{ii} })
+    override type Next[T] = ZTuple@{tupleCount}[@for(ii <- 1 to tupleCount - 1) { I@{ii}, } TopZero1[BottomSubTree0[T]]]
+    override def next[T](t: T): ZTuple@{tupleCount}[@for(ii <- 1 to tupleCount - 1) { I@{ii}, } TopZero1[BottomSubTree0[T]]] =
+    ZTuple@{tupleCount}(@for(ii <- 1 to tupleCount - 1) { i@{ii}, } TopZero1(BottomSubTree0(t)))
+}
+
+case class ZTuple@{tupleCount}[@for(ii <- 1 to tupleCount - 1) { I@{ii}, } Tail <: TopNumber](@for(ii <- 1 to tupleCount - 1) { i@{ii}: I@{ii}, } tail: Tail) extends ZTuple {
+    override type Next[T]
+    override def next[T](t: T): ZTuple@{tupleCount}[@for(ii <- 1 to tupleCount - 1) { I@{ii}, } Tail]
 }
